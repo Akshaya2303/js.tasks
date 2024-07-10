@@ -44,27 +44,46 @@
 // input: Enter a number: 123
 // output: Odd sum is greater
 
-let number = 163382;
+// let number = "163382";
 
-let numStr = number.toString();
+// // let numStr = number.toString();
 
-let evenSum = 0;
-let oddSum = 0;
+// let evenSum = 0;
+// let oddSum = 0;
 
-for (let i = 0; i < numStr.length; i++) {
-    let digit = numStr.charCodeAt(i) - 48; // Convert character to digit without using parseInt
+// for (let i = 0; i < number.length; i++) {
+//     let digit = number.charCodeAt(i) - 48; // Convert character to digit without using parseInt
     
-    if (digit % 2 === 0) {
-        evenSum += digit;
-    } else {
-        oddSum += digit;
-    }
-}
+//     if (digit % 2 === 0) {
+//         evenSum += digit;
+//     } else {
+//         oddSum += digit;
+//     }
+// }
 
-if (evenSum > oddSum) {
-    console.log("Even sum is greater");
-} else if (oddSum > evenSum) {
-    console.log("Odd sum is greater");
-} else {
-    console.log("Even sum and odd sum are equal");
-}
+// if (evenSum > oddSum) {
+//     console.log("Even sum is greater");
+// } else if (oddSum > evenSum) {
+//     console.log("Odd sum is greater");
+// } else {
+//     console.log("Even sum and odd sum are equal");
+// }
+
+
+// A non-fibonacci  series less than a given no
+// example:Input: 10
+// output: 4 6 7 9 10
+
+
+
+
+
+
+
+
+
+// 2) input: Enter no of fib-series: 7
+// output: prime numbers in the fib series are: 2 3 5
+
+// 3) input: Enter no of fib-series: 7
+// output: Non prime numbers in the fib series are: 0 1 1 8 .

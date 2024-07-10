@@ -36,14 +36,49 @@
 
 
 // find the length of a string without using method.
-let str = "Hello, World!";
-let length = 0;
+// let str = "Hello, World!";
+// let length = 0;
 
-while (true) {
-    if (str[length] === undefined) {
-        break;
-    }
-    length++;
+// while (true) {
+//     if (str[length] === undefined) {
+//         break;
+//     }
+//     length++;
+// }
+
+// console.log("Length of the string is:", length);
+
+
+// // 1)iterabe object values through for in loop
+
+
+// const obj = { a: 1, b: 2, c: 3 };
+// for(const key in obj){
+//     console.log(obj[key]);
+// }
+
+// //2) iterabe object keys  through for in loop
+// const obj={a: 1, b: 2, c: 3};
+// for(const key in obj){
+//     console.log(key);
+// }
+
+// // 3)iterate object values and keys using entries , keys and values methods
+//     // object entrries - keys and values
+//     const obj={a: 1, b: 2, c: 3};
+//     for(const [key,value]of Object.entries(obj));
+// {
+//     console.log('key:${key},value:${value}');
+// }
+
+//     // object keys - keys and values
+// const obj={a:1,b:2,c:3};
+// for(const key of Object.key(obj)){
+//     console.log("key:${key},value:${obj[key]}");
+// }
+
+    // /object values - we can get only values
+const obj={a:1,b:2,c:3};
+for(const value of Object.values(obj)){
+    console.log(value);
 }
-
-console.log("Length of the string is:", length);
