@@ -77,8 +77,76 @@
 //     console.log("key:${key},value:${obj[key]}");
 // }
 
-    // /object values - we can get only values
-const obj={a:1,b:2,c:3};
-for(const value of Object.values(obj)){
-    console.log(value);
+//     // /object values - we can get only values
+// const obj={a:1,b:2,c:3};
+// for(const value of Object.values(obj)){
+//     console.log(value);
+// }
+
+// find the largest number in an array
+// let arr=[1,5,7,4,6]
+// let max=arr[0];
+// for(i=0;i<=arr.length;i++)
+// {
+//     if(arr[i]>max)
+//     {
+//         max=arr[i];
+//     }
+// }
+// console.log(max);
+
+
+//  find the second largest number in an array
+// let arr=[1,3,2,5,4]
+// let max=arr[0];
+// let secmax=arr[0];
+// for(i=0;i<=arr.length;i++)
+// {
+//     if(arr[i]>max)
+//     {
+//         secmax=max;
+//     }
+//     if(arr[i]>secmax)
+//     {
+//         secmax=arr[i];
+//     }
+// }
+// console.log(secmax);
+
+
+// //  find the smallest number in an array
+
+
+// let arr = [1, 3, 2, 5, 4];
+// let min = arr[0]; 
+// for (let i = 1; i < arr.length; i++) { 
+//     if (arr[i] < min) {
+//         min = arr[i];
+//     }
+// }
+// console.log(min); 
+
+// //  find the sum of the even numbers in an array
+// let arr=[3,1,2,6,5,4];
+// let even=0;
+// for(i=0;i<arr.length;i++)
+// {
+//     if(arr[i]%2==0)
+//     {
+//         even=even+arr[i];
+//     }
+// }
+// console.log(even);
+
+
+//  find the odd numbers in an array and push into new array
+let arr=[2,1,4,3,5,6,7]
+let odd=[];
+for(i=0;i<arr.length;i++)
+{
+    if(arr[i]%2!=0)
+    {
+        odd.push(arr[i]);
+    }    
 }
+console.log(odd);
