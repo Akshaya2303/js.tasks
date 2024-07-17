@@ -216,17 +216,17 @@
 // Task 10: Combining Methods
 // Objective: Use multiple array methods in a single task.
 
-const array1 = [1, 2, 3];
-const array2 = [4, 5, 6];
-const mergedArray = array1.concat(array2).flat();
-// console.log(mergedArray); // [1, 2, 3, 4,
+// const array1 = [1, 2, 3];
+// const array2 = [4, 5, 6];
+// const mergedArray = array1.concat(array2).flat();
+// // console.log(mergedArray); // [1, 2, 3, 4,
 
-const splicedArray = mergedArray.toSpliced(2, 1, 'a');
-console.log(splicedArray); 
-const finalArray = splicedArray.slice(1, 5);
-console.log(finalArray); 
-console.log(finalArray.includes('a')); // true
-console.log(finalArray.indexOf(5)); // 3
+// const splicedArray = mergedArray.toSpliced(2, 1, 'a');
+// console.log(splicedArray); 
+// const finalArray = splicedArray.slice(1, 5);
+// console.log(finalArray); 
+// console.log(finalArray.includes('a')); // true
+// console.log(finalArray.indexOf(5)); // 3
 
 
 

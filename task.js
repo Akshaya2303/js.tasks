@@ -171,30 +171,125 @@
 //   i++;
 // }
 
-let num = prompt("Enter a number: ");
-let strNum = num.toString();
-let max = strNum[0];
-let min = strNum[0];
-let maxFirst = true;
-for (let i = 1; i < strNum.length; i++) {
-    let digit = strNum[i];
-    if (digit > max) {
-        max = digit;
-    }
-    if (digit < min) {
-        min = digit;
-    }
-    if (digit === max && i < strNum.indexOf(min)) {
-        maxFirst = true;
-    }
-    if (digit === min && i < strNum.indexOf(max)) {
-        maxFirst = false;
-    }
+// let num = prompt("Enter a number: ");
+// let strNum = num.toString();
+// let max = strNum[0];
+// let min = strNum[0];
+// let maxFirst = true;
+// for (let i = 1; i < strNum.length; i++) {
+//     let digit = strNum[i];
+//     if (digit > max) {
+//         max = digit;
+//     }
+//     if (digit < min) {
+//         min = digit;
+//     }
+//     if (digit === max && i < strNum.indexOf(min)) {
+//         maxFirst = true;
+//     }
+//     if (digit === min && i < strNum.indexOf(max)) {
+//         maxFirst = false;
+//     }
+// }
+// if (maxFirst) {
+//     console.log("Maximum is first and Minimum is second.");
+// } else {
+//     console.log("Minimum is first and Maximum is second.");
+// // }
+// // 1) Write a program to convert the lower case vowels to upper and viceversa.
+
+// // input: I am Good
+// // output: I Am GOOd
+
+// str=prompt("enter a string:")
+// str1="aeiouAEIOU"
+// res=""
+// for(i of str)
+// {
+//     if(str1.includes(i)){
+//         if(i==i.toUpperCase()) 
+//         {
+//             res+=i.toLowerCase();
+//         }
+//         else
+//         {
+//             res+=i.toUpperCase();
+//         }
+//     }
+// else{
+//         res+=i
+// }
+// }
+// console.log(res);
+
+
+
+
+// 2) Write a program to print one vowel, followed by consnant and soon.
+// input: I am Good
+// output: ImaGodo
+
+// input: Hello World
+// output: eHololWorld
+
+
+str = prompt("Enter a string: ");
+str1 = "aeiouAEIOU";
+let vowel = "";
+let con = "";
+for (i of str) {
+  if (str1.includes(i) && i != " ") {
+    vowel += i;
+  } else if (i != " ") {
+    con += i;
+  }
 }
-if (maxFirst) {
-    console.log("Maximum is first and Minimum is second.");
+console.log(con, vowel);
+let res = "";
+let j = 0;
+if (vowel.length > con.length) {
+  while (j < con.length) {
+    res = res + vowel[j] + con[j];
+    j++;
+  }
+  res = res + vowel.slice(j);
+} else if (vowel.length < con.length) {
+  while (j < vowel.length) {
+    res = res + vowel[j] + con[j];
+    j++;
+  }
+  res = res + con.slice(j);
 } else {
-    console.log("Minimum is first and Maximum is second.");
+  if (j < vowel.length) res = res + vowel[j] + con[j];
+  j++;
 }
+console.log(res);
+
+
+
+
+
+// // 3) Write a program to print the vowels followed consnants in every word.
+
+// // input: Hello World
+// // output: eoHll oWrld
+// x = prompt("enter a string: ").split(" ");
+// res = "";
+// arr = [];
+// for (i of x) {
+//   let v = "";
+//   let c = "";
+//   let str = "aeiouAEIOU";
+//   for (j of i) {
+//     if (str.includes(j)) {
+//       v = v + j;
+//     } else {
+//       c = c + j;
+//     }
+//   }
+//   res = res + v + c + " ";
+// }
+// arr.push(res);
+// console.log(arr.join("  "));
 
 

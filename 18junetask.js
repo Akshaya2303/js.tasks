@@ -66,5 +66,5 @@
 // Output: ___undefined__
 
 // debugger
-console.log(a)
-let a=20;
+// console.log(a)
+// let a=20;
