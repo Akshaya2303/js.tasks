@@ -68,3 +68,61 @@
 // debugger
 // console.log(a)
 // let a=20;
+
+// 17 July task
+
+// // 1.Enter rows:4
+// // Output:
+// // 1
+// // 1 2
+// // 1 2 3
+// // 1 2 3 4
+// rows=+prompt("enter rows:");
+// for(i=1;i<=rows;i++)
+// {
+//     s="";
+//     for(j=1;j<=i;j++)
+//     {
+//         s=s+j +" ";
+//     }
+// console.log(s)
+// }
+
+
+// // 2. Enter rows:4
+// //  Output:
+// //  1
+// //  2 3
+// //  4 5 6
+// //  7 8 9 10
+// rows=+prompt("enter rows:");
+// count=1;
+// for(i=1;i<=rows;i++)
+// {
+//     s="";
+//     for(j=1;j<=i;j++)
+//     {
+//         s+=count+" ";
+//         count++;
+        
+//     }console.log(s);
+// }
+
+
+// Enter rows:4
+// * * * *
+//   * * *
+//     * *
+//       *
+rows = +prompt("Enter number of rows:");
+for ( i = rows; i >= 1; i--) {
+     s = "";
+    for ( k = 0; k < rows - i; k++) {
+        s += "  "; 
+    }
+    for (j = 1; j <= i; j++) {
+        s += "* "; 
+    }
+    console.log(s);
+}
+
