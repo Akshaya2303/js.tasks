@@ -229,4 +229,52 @@
 // console.log(finalArray.indexOf(5)); // 3
 
 
+// 1.Write a function that takes an array of objects as an 
+// argument and returns an array of the keys of each object using for...in iteration.
+// Input: [{ a: 1, b: 2 }, { c: 3, d: 4 }, { e: 5, f: 6 }]
+// // Output: [["a", "b"], ["c", "d"], ["e", "f"]]
+// const obj= [{ a: 1, b: 2 }, { c: 3, d: 4 }, { e: 5, f: 6 }];
+// let x= obj.map(item => Object.keys(item));
+// console.log(x);
+
+
+// 2.Write a function that takes an array of objects as an 
+// argument and returns an array of the values of each object using for...in iteration.
+// Input: [{ a: 1, b: 2 }, { c: 3, d: 4 }, { e: 5, f: 6 }]
+// Output: [[1, 2], [3, 4], [5, 6]]
+ 
+// const obj= [{ a: 1, b: 2 }, { c: 3, d: 4 }, { e: 5, f: 6 }];
+// let x= obj.map(item=> Object.values(item));
+// console.log(x);
+
+
+// 4.Write a function that takes an array of objects as an 
+// argument and returns a new array with the objects sorted by a specific property 
+// using for...in iteration.
+// Input: [{ a: 2 }, { a: 1 }, { a: 3 }], "a"
+// Output: [{ a: 1 }, { a: 2 }, { a: 3 }]
+
+// const Array = [{ a: 2 }, { a: 1 }, { a: 3 }];
+// const a = "a";
+// Array.sort((a, b) => a[a] - b[a]);
+// console.log(Array); 
+
+
+
+// 5.Write a function that takes an array of objects as an argument and 
+// returns a new object with the properties from all the objects in the array 
+// using for...in iteration.
+// Input: [{ a: 1 }, { b: 2 }, { c: 3 }]
+// Output: { a: 1, b: 2, c: 3 }
+
+const objArray = [{ a: 1 }, { b: 2 }, { c: 3 }];
+let result = {};
+for (let obj of objArray) {
+  for (let key in obj) {
+    result[key] = obj[key];
+  }
+}
+console.log(result); 
+
+
 

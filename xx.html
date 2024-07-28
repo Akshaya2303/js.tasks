@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Quiz Platform</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: lightcyan;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+           border: 2px solid black;
+            margin-top: 50px;
+        }
+        h2, h3 {
+            text-align: center;
+        }
+        input {
+            display: block;
+            margin: 10px auto;
+            padding: 10px;
+            width: 80%;
+        }
+        button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+        }
+        #quiz-list .list-group-item {
+            background-color: lightgray;
+            cursor: pointer;
+        }
+        #quiz-container, #score-section {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="auth-section">
+            <h2>Online Quiz Platform</h2>
+            <div id="login-form">
+                <h3>Login</h3>
+                <input type="text" id="login-username" placeholder="Username">
+                <input type="password" id="login-password" placeholder="Password">
+                <button id="login-btn" class="btn btn-primary">Login</button>
+                <p id="signup-link">Don't have an account? <span id="show-signup">Sign Up</span></p>
+            </div>
+            <div id="signup-form" style="display:none;">
+                <h3>Sign Up</h3>
+                <input type="text" id="signup-username" placeholder="Username">
+                <input type="password" id="signup-password" placeholder="Password">
+                <button id="signup-btn" class="btn btn-primary">Sign Up</button>
+                <p id="login-link">Already have an account? <span id="show-login">Login</span></p>
+            </div>
+        </div>
+        <div id="quiz-section" style="display:none;">
+            <h2>Select a Quiz</h2>
+            <ul id="quiz-list" class="list-group"></ul>
+            <div id="quiz-container" style="display:none;">
+                <h3 id="question"></h3>
+                <ul id="options" class="list-group"></ul>
+                <button id="next-question" class="btn btn-primary" style="display:none;">Next Question</button>
+            </div>
+            <div id="score-section" style="display:none;">
+                <h3>Your Score: <span id="score"></span></h3>
+                <button id="restart-quiz" class="btn btn-primary">Restart Quiz</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const authSection = document.getElementById('auth-section');
+            const loginForm = document.getElementById('login-form');
+            const signupForm = document.getElementById('signup-form');
+            const quizSection = document.getElementById('quiz-section');
+            const quizList = document.getElementById('quiz-list');
+            const quizContainer = document.getElementById('quiz-container');
+            const questionElement = document.getElementById('question');
+            const optionsElement = document.getElementById('options');
+            const nextQuestionButton = document.getElementById('next-question');
+            const scoreSection = document.getElementById('score-section');
+            const scoreElement = document.getElementById('score');
+            const restartQuizButton = document.getElementById('restart-quiz');
+
+            const quizzes = [
+                {
+                    title: 'General Knowledge',
+                    questions: [
+                        { question: 'What is the capital of France?', options: ['Paris', 'London', 'Berlin', 'Madrid'], answer: 'Paris' },
+                        { question: 'Who wrote "Hamlet"?', options: ['Shakespeare', 'Dante', 'Homer', 'Cervantes'], answer: 'Shakespeare' }
+                    ]
+                },
+                {
+                    title: 'Science',
+                    questions: [
+                        { question: 'What is the chemical symbol for water?', options: ['H2O', 'CO2', 'O2', 'H2'], answer: 'H2O' },
+                        { question: 'Who developed the theory of relativity?', options: ['Einstein', 'Newton', 'Galileo', 'Tesla'], answer: 'Einstein' }
+                    ]
+                }
+            ];
+
+            let currentQuiz = null;
+            let currentQuestionIndex = 0;
+            let score = 0;
+
+            document.getElementById('show-signup').addEventListener('click', function () {
+                loginForm.style.display = 'none';
+                signupForm.style.display = 'block';
+            });
+
+            document.getElementById('show-login').addEventListener('click', function () {
+                signupForm.style.display = 'none';
+                loginForm.style.display = 'block';
+            });
+
+            document.getElementById('login-btn').addEventListener('click', function () {
+                authSection.style.display = 'none';
+                quizSection.style.display = 'block';
+                displayQuizzes();
+            });
+
+            document.getElementById('signup-btn').addEventListener('click', function () {
+                signupForm.style.display = 'none';
+                loginForm.style.display = 'block';
+            });
+
+            function displayQuizzes() {
+                quizList.innerHTML = '';
+                quizzes.forEach((quiz, index) => {
+                    const li = document.createElement('li');
+                    li.className = 'list-group-item';
+                    li.textContent = quiz.title;
+                    li.addEventListener('click', () => startQuiz(index));
+                    quizList.appendChild(li);
+                });
+            }
+
+            function startQuiz(index) {
+                currentQuiz = quizzes[index];
+                currentQuestionIndex = 0;
+                score = 0;
+                quizList.style.display = 'none';
+                quizContainer.style.display = 'block';
+                scoreSection.style.display = 'none';
+                displayQuestion();
+            }
+
+            function displayQuestion() {
+                const question = currentQuiz.questions[currentQuestionIndex];
+                questionElement.textContent = question.question;
+                optionsElement.innerHTML = '';
+                question.options.forEach(option => {
+                    const li = document.createElement('li');
+                    li.className = 'list-group-item';
+                    li.textContent = option;
+                    li.addEventListener('click', () => selectAnswer(option));
+                    optionsElement.appendChild(li);
+                });
+                nextQuestionButton.style.display = 'none';
+            }
+
+            function selectAnswer(option) {
+                const question = currentQuiz.questions[currentQuestionIndex];
+                if (option === question.answer) {
+                    score++;
+                }
+                optionsElement.querySelectorAll('li').forEach(li => {
+                    if (li.textContent === question.answer) {
+                        li.classList.add('list-group-item-success');
+                    } else {
+                        li.classList.add('list-group-item-danger');
+                    }
+                });
+                nextQuestionButton.style.display = 'block';
+            }
+
+            nextQuestionButton.addEventListener('click', function () {
+                currentQuestionIndex++;
+                if (currentQuestionIndex < currentQuiz.questions.length) {
+                    displayQuestion();
+                } else {
+                    displayScore();
+                }
+            });
+
+            function displayScore() {
+                quizContainer.style.display = 'none';
+                scoreSection.style.display = 'block';
+                scoreElement.textContent = `${score} / ${currentQuiz.questions.length}`;
+            }
+
+            restartQuizButton.addEventListener('click', function () {
+                quizList.style.display = 'block';
+                scoreSection.style.display = 'none';
+            });
+        });
+    </script>
+</body>
+</html>
