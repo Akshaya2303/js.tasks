@@ -7,78 +7,119 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background-color: lightcyan;
+            background-color: rgb(201, 228, 246);
             font-family: Arial, sans-serif;
         }
         .container {
-           border: 2px solid black;
+            border: 2px solid black;
             margin-top: 50px;
+            padding: 20px;
         }
         h2, h3 {
             text-align: center;
         }
-        input {
+        input, button, select {
             display: block;
             margin: 10px auto;
-            padding: 10px;
+            padding: 8px;
             width: 80%;
+            font-size: 14px;
         }
-        button {
-            display: block;
-            margin: 20px auto;
-            padding: 10px 20px;
+        #signup-btn , #login-btn ,#view-progress ,#clear-storage {
+            width: 20%;
+            margin-left: 140px;
+            /* padding: 20px; */
+        }
+        .btn {
+            padding: 6px 6px 6px 6px; /* Smaller padding for smaller buttons */
+            font-size: 14px; /* Adjust the font size for buttons */
         }
         #quiz-list .list-group-item {
-            background-color: lightgray;
+            background-color:;
             cursor: pointer;
         }
-        #quiz-container, #score-section {
+        #quiz-container, #score-section, #scores-section {
+            text-align: center;
+        }
+        .hidden {
+            display: none;
+        }
+        .user-scores {
+            margin-bottom: 30px;
+        }
+        .error {
+            color: red;
             text-align: center;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div id="auth-section">
-            <h2>Online Quiz Platform</h2>
-            <div id="login-form">
-                <h3>Login</h3>
-                <input type="text" id="login-username" placeholder="Username">
-                <input type="password" id="login-password" placeholder="Password">
-                <button id="login-btn" class="btn btn-primary">Login</button>
-                <p id="signup-link">Don't have an account? <span id="show-signup">Sign Up</span></p>
-            </div>
-            <div id="signup-form" style="display:none;">
-                <h3>Sign Up</h3>
-                <input type="text" id="signup-username" placeholder="Username">
-                <input type="password" id="signup-password" placeholder="Password">
-                <button id="signup-btn" class="btn btn-primary">Sign Up</button>
-                <p id="login-link">Already have an account? <span id="show-login">Login</span></p>
-            </div>
+        <h2>Online Quiz Platform</h2>
+
+        <!-- Sign Up Section -->
+        <div id="signup-section">
+            <h3>Sign Up</h3>
+            <form id="signupForm">
+                <input type="text" id="signup_username" placeholder="Username" required>
+                <input type="password" id="signup_password" placeholder="Password" required>
+                <p id="signup-error" class="error"></p>
+                <button id="signup-btn" class="btn btn-primary" type="submit">Sign Up</button>
+                <p>Already have an account? <span id="show-login" style="cursor:pointer; color:blue;">Login</span></p>
+            </form>
         </div>
-        <div id="quiz-section" style="display:none;">
+
+        <!-- Login Section -->
+        <div id="login-section" class="hidden">
+            <h3>Login</h3>
+            <form id="loginForm">
+                <input type="text" id="login_username" placeholder="Username" required>
+                <input type="password" id="login_password" placeholder="Password" required>
+                <p id="login-error" class="error"></p>
+                <button id="login-btn" class="btn btn-primary" type="submit">Login</button>
+                <p>Don't have an account? <span id="show-signup" style="cursor:pointer; color:blue;">Sign Up</span></p>
+            </form>
+        </div>
+
+        <!-- Quiz Section -->
+        <div id="quiz-section" class="hidden">
             <h2>Select a Quiz</h2>
             <ul id="quiz-list" class="list-group"></ul>
-            <div id="quiz-container" style="display:none;">
+            <div id="quiz-container" class="hidden">
                 <h3 id="question"></h3>
+                <br>
                 <ul id="options" class="list-group"></ul>
-                <button id="next-question" class="btn btn-primary" style="display:none;">Next Question</button>
+                <button id="next-question" class="btn btn-primary hidden">Next Question</button>
             </div>
-            <div id="score-section" style="display:none;">
+            <div id="score-section" class="hidden">
                 <h3>Your Score: <span id="score"></span></h3>
                 <button id="restart-quiz" class="btn btn-primary">Restart Quiz</button>
             </div>
+            <br>
+            <button id="view-progress" class="btn btn-secondary">View All Users' Progress</button>
+            <button id="clear-storage" class="btn btn-danger">Clear all scores</button>
+        </div>
+
+        <!-- Scores Section -->
+        <div id="scores-section" class="hidden">
+            <h2>All Users' Progress</h2>
+            <div id="scores-container"></div>
+            <br>
+            <button id="back-to-quiz" class="btn btn-secondary">Back to Quiz</button>
+        </div>
+
+        <!-- Admin Section for Adding Quizzes -->
+        <div id="admin-section" class="hidden">
+            <h3>Add a New Quiz</h3>
+            <input type="text" id="new-quiz-title" placeholder="Quiz Title">
+            <button id="add-quiz-btn" class="btn btn-primary">Add Quiz</button>
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const authSection = document.getElementById('auth-section');
-            const loginForm = document.getElementById('login-form');
-            const signupForm = document.getElementById('signup-form');
+            const signupSection = document.getElementById('signup-section');
+            const loginSection = document.getElementById('login-section');
             const quizSection = document.getElementById('quiz-section');
             const quizList = document.getElementById('quiz-list');
             const quizContainer = document.getElementById('quiz-container');
@@ -88,20 +129,38 @@
             const scoreSection = document.getElementById('score-section');
             const scoreElement = document.getElementById('score');
             const restartQuizButton = document.getElementById('restart-quiz');
+            const loginError = document.getElementById('login-error');
+            const signupError = document.getElementById('signup-error');
+            const scoresSection = document.getElementById('scores-section');
+            const scoresContainer = document.getElementById('scores-container');
+            const viewProgressButton = document.getElementById('view-progress');
+            const backToQuizButton = document.getElementById('back-to-quiz');
+            const clearStorageButton = document.getElementById('clear-storage');
+            const adminSection = document.getElementById('admin-section');
+            const newQuizTitle = document.getElementById('new-quiz-title');
+            const addQuizButton = document.getElementById('add-quiz-btn');
 
-            const quizzes = [
+            let currentUsername = '';
+            let quizzes = [
                 {
-                    title: 'General Knowledge',
+                    title: 'Html',
                     questions: [
-                        { question: 'What is the capital of France?', options: ['Paris', 'London', 'Berlin', 'Madrid'], answer: 'Paris' },
-                        { question: 'Who wrote "Hamlet"?', options: ['Shakespeare', 'Dante', 'Homer', 'Cervantes'], answer: 'Shakespeare' }
+                        { question: 'What is HTML?', options: ['HyperText Markup Language', 'Xtensible Markup Language', 'Generalized Markup Language', 'Mathematical Markup Language'], answer: 'HyperText Markup Language' },
+                        { question: 'Which is an HTML tag?', options: ['<br>', '<aa>', '.aa', '/a'], answer: '<br>' }
                     ]
                 },
                 {
-                    title: 'Science',
+                    title: 'Css',
                     questions: [
-                        { question: 'What is the chemical symbol for water?', options: ['H2O', 'CO2', 'O2', 'H2'], answer: 'H2O' },
-                        { question: 'Who developed the theory of relativity?', options: ['Einstein', 'Newton', 'Galileo', 'Tesla'], answer: 'Einstein' }
+                        { question: 'Which of the below is the abbreviation of CSS?', options: ['Cascade sheets style', 'Cascading style sheets', 'Coded Style Sheet', 'Coloring style sheet'], answer: 'Cascading style sheets' },
+                        { question: 'Which of the below CSS properties is used to change the background color?', options: ['background-color', 'gb', 'bg', 'color'], answer: 'background-color' }
+                    ]
+                },
+                {
+                    title: 'Js',
+                    questions: [
+                        { question: 'The "function" and "var" are known as:', options: ['Keywords','Data types', 'Declaration statements','Prototypes'], answer: 'Declaration statements' },
+                        { question: 'Which type of JavaScript language is:', options: ['Object-Oriented','Object-Based','Assembly-language','High-level'], answer: 'Object-Based' }
                     ]
                 }
             ];
@@ -110,27 +169,77 @@
             let currentQuestionIndex = 0;
             let score = 0;
 
-            document.getElementById('show-signup').addEventListener('click', function () {
-                loginForm.style.display = 'none';
-                signupForm.style.display = 'block';
-            });
+            // Hash function for simple password hashing
+            function hashPassword(password) {
+                let hash = 0;
+                for (let i = 0; i < password.length; i++) {
+                    const char = password.charCodeAt(i);
+                    hash = (hash << 5) - hash + char;
+                    hash = hash & hash; // Convert to 32bit integer
+                }
+                return hash;
+            }
 
+            // Event listeners for switching between sign-up and login
             document.getElementById('show-login').addEventListener('click', function () {
-                signupForm.style.display = 'none';
-                loginForm.style.display = 'block';
+                signupSection.classList.add('hidden');
+                loginSection.classList.remove('hidden');
             });
 
-            document.getElementById('login-btn').addEventListener('click', function () {
-                authSection.style.display = 'none';
-                quizSection.style.display = 'block';
-                displayQuizzes();
+            document.getElementById('show-signup').addEventListener('click', function () {
+                loginSection.classList.add('hidden');
+                signupSection.classList.remove('hidden');
             });
 
-            document.getElementById('signup-btn').addEventListener('click', function () {
-                signupForm.style.display = 'none';
-                loginForm.style.display = 'block';
+            // Sign up form submission
+            document.getElementById('signupForm').addEventListener('submit', function (e) {
+                e.preventDefault();
+                const username = document.getElementById('signup_username').value.trim();
+                const password = document.getElementById('signup_password').value.trim();
+
+                if (username === '' || password === '') {
+                    signupError.textContent = 'Username and password cannot be empty.';
+                    return;
+                }
+
+                const localStorageData = JSON.parse(localStorage.getItem('submittedUsers') || '[]');
+                const existingUser = localStorageData.find(user => user.username === username);
+
+                if (existingUser) {
+                    signupError.textContent = 'Username already exists.';
+                    return;
+                }
+
+                const hashedPassword = hashPassword(password);
+                localStorageData.push({ username, password: hashedPassword, scores: [] });
+                localStorage.setItem('submittedUsers', JSON.stringify(localStorageData));
+                signupSection.classList.add('hidden');
+                loginSection.classList.remove('hidden');
+                signupError.textContent = '';
             });
 
+            // Login form submission
+            document.getElementById('loginForm').addEventListener('submit', function (e) {
+                e.preventDefault();
+                const login_username = document.getElementById('login_username').value.trim();
+                const password = document.getElementById('login_password').value.trim();
+
+                const localStorageData = JSON.parse(localStorage.getItem('submittedUsers') || '[]');
+                const hashedPassword = hashPassword(password);
+                const user = localStorageData.find(user => user.username === login_username && user.password === hashedPassword);
+
+                if (user) {
+                    currentUsername = user.username;
+                    loginSection.classList.add('hidden');
+                    quizSection.classList.remove('hidden');
+                    displayQuizzes();
+                    loginError.textContent = '';
+                } else {
+                    loginError.textContent = 'Invalid Credentials';
+                }
+            });
+
+            // Display list of quizzes
             function displayQuizzes() {
                 quizList.innerHTML = '';
                 quizzes.forEach((quiz, index) => {
@@ -142,30 +251,44 @@
                 });
             }
 
+            // Start the selected quiz
             function startQuiz(index) {
                 currentQuiz = quizzes[index];
                 currentQuestionIndex = 0;
                 score = 0;
-                quizList.style.display = 'none';
-                quizContainer.style.display = 'block';
-                scoreSection.style.display = 'none';
+                quizList.classList.add('hidden');
+                quizContainer.classList.remove('hidden');
+                scoreSection.classList.add('hidden');
                 displayQuestion();
             }
 
+            // Display a question
             function displayQuestion() {
-                const question = currentQuiz.questions[currentQuestionIndex];
-                questionElement.textContent = question.question;
-                optionsElement.innerHTML = '';
-                question.options.forEach(option => {
-                    const li = document.createElement('li');
-                    li.className = 'list-group-item';
-                    li.textContent = option;
-                    li.addEventListener('click', () => selectAnswer(option));
-                    optionsElement.appendChild(li);
-                });
-                nextQuestionButton.style.display = 'none';
+                if (currentQuiz && currentQuiz.questions && currentQuiz.questions.length > 0) {
+                    const question = currentQuiz.questions[currentQuestionIndex];
+                    questionElement.textContent = question.question;
+                    optionsElement.innerHTML = '';
+
+                    if (!question.options || question.options.length === 0) {
+                        optionsElement.innerHTML = '<p>No options available for this question.</p>';
+                        return;
+                    }
+
+                    question.options.forEach(option => {
+                        const li = document.createElement('li');
+                        li.className = 'list-group-item';
+                        li.textContent = option;
+                        li.addEventListener('click', () => selectAnswer(option));
+                        optionsElement.appendChild(li);
+                    });
+                    nextQuestionButton.classList.add('hidden');
+                } else {
+                    questionElement.textContent = 'No questions available in this quiz.';
+                    optionsElement.innerHTML = '';
+                }
             }
 
+            // Select an answer
             function selectAnswer(option) {
                 const question = currentQuiz.questions[currentQuestionIndex];
                 if (option === question.answer) {
@@ -178,9 +301,10 @@
                         li.classList.add('list-group-item-danger');
                     }
                 });
-                nextQuestionButton.style.display = 'block';
+                nextQuestionButton.classList.remove('hidden');
             }
 
+            // Move to the next question or finish the quiz
             nextQuestionButton.addEventListener('click', function () {
                 currentQuestionIndex++;
                 if (currentQuestionIndex < currentQuiz.questions.length) {
@@ -190,16 +314,119 @@
                 }
             });
 
+            // Display the score after the quiz
             function displayScore() {
-                quizContainer.style.display = 'none';
-                scoreSection.style.display = 'block';
+                quizContainer.classList.add('hidden');
+                scoreSection.classList.remove('hidden');
                 scoreElement.textContent = `${score} / ${currentQuiz.questions.length}`;
+
+                // Save score to user's record
+                let localStorageData = JSON.parse(localStorage.getItem('submittedUsers') || '[]');
+                localStorageData = localStorageData.map(user => {
+                    if (user.username === currentUsername) {
+                        user.scores.push({ quiz: currentQuiz.title, score: score });
+                    }
+                    return user;
+                });
+                localStorage.setItem('submittedUsers', JSON.stringify(localStorageData));
             }
 
+            // Restart the quiz
             restartQuizButton.addEventListener('click', function () {
-                quizList.style.display = 'block';
-                scoreSection.style.display = 'none';
+                quizList.classList.remove('hidden');
+                scoreSection.classList.add('hidden');
             });
+
+            // View all users' progress
+            viewProgressButton.addEventListener('click', function () {
+                quizSection.classList.add('hidden');
+                scoresSection.classList.remove('hidden');
+                displayAllScores();
+            });
+
+            // Go back to the quiz section
+            backToQuizButton.addEventListener('click', function () {
+                scoresSection.classList.add('hidden');
+                quizSection.classList.remove('hidden');
+            });
+
+            // Clear local storage
+            clearStorageButton.addEventListener('click', function () {
+                if (confirm('Are you sure you want to clear all data?')) {
+                    localStorage.clear();
+                    alert('Local storage cleared.');
+                }
+            });
+
+            // Display all users' progress
+            function displayAllScores() {
+                scoresContainer.innerHTML = '';
+                const localStorageData = JSON.parse(localStorage.getItem('submittedUsers') || '[]');
+
+                if (localStorageData.length === 0) {
+                    scoresContainer.innerHTML = '<p>No users found.</p>';
+                    return;
+                }
+
+                localStorageData.forEach(user => {
+                    const userDiv = document.createElement('div');
+                    userDiv.className = 'user-scores';
+                    const userHeading = document.createElement('h4');
+                    userHeading.textContent = `${user.username}'s Progress`;
+                    userDiv.appendChild(userHeading);
+
+                    if (user.scores.length > 0) {
+                        const scoreList = document.createElement('ul');
+                        scoreList.className = 'list-group'; // Missing semicolon added
+
+                        user.scores.forEach(scoreRecord => {
+                            const quizDetails = quizzes.find(q => q.title === scoreRecord.quiz);
+                            const li = document.createElement('li');
+                            li.className = 'list-group-item';
+                            li.textContent = `${scoreRecord.quiz}: ${scoreRecord.score} / ${quizDetails.questions.length}`;
+                            scoreList.appendChild(li);
+                        });
+
+                        userDiv.appendChild(scoreList);
+                    } else {
+                        const noScoreMessage = document.createElement('p');
+                        noScoreMessage.textContent = 'No quizzes taken yet.';
+                        userDiv.appendChild(noScoreMessage);
+                    }
+
+                    scoresContainer.appendChild(userDiv);
+                });
+            }
+
+            // Add a new quiz (Admin feature)
+            addQuizButton.addEventListener('click', function () {
+                const title = newQuizTitle.value.trim();
+                if (title === '') {
+                    alert('Quiz title cannot be empty.');
+                    return;
+                }
+
+                const existingQuiz = quizzes.find(quiz => quiz.title.toLowerCase() === title.toLowerCase());
+                if (existingQuiz) {
+                    alert('A quiz with this title already exists.');
+                    return;
+                }
+
+                quizzes.push({ title: title, questions: [] });
+                alert('New quiz added.');
+                newQuizTitle.value = '';
+                displayQuizzes();
+            });
+
+            // Show admin section for adding quizzes
+            // You can add a button or link to show this section
+            // For example:
+            const showAdminSectionButton = document.getElementById('show-admin-section');
+            showAdminSectionButton.addEventListener('click', function () {
+                quizSection.classList.add('hidden');
+                adminSection.classList.remove('hidden');
+            });
+
         });
     </script>
 </body>
